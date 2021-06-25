@@ -1,20 +1,42 @@
 const Discord = require("discord.js");
+var fs = require('fs');
 
 require("dotenv").config();
 
 const client = new Discord.Client();
 
-const prefix = process.env.prefix;
+const prefix = process.env.PREFIX;
+
+var badwords =  fs.readFileSync('words.txt', 'utf8').split('\n');
+
+var usernames = {
+    "explodingwater": "Justin",
+    "vantage": "Claire",
+    "Xodo": "Alex",
+    "Ciel0_RD": "Enrique",
+    "Santoku": "Trav",
+    "Chork": "chork"
+}
 
 
 client.once("ready", ()=> {
+    for (var i=badwords.length-1; i>=0; i--) {
+        if (badwords[i] === '') {
+            badwords.splice(i, 1);
+        }
+    }
     console.log("JustinBot is online");
 });
 
-let badwords = ["hotay", "schlick", "pogchamp", "schlik", "shlick", "helb", "chikn", "lettuce", "terry"];
-
 //commands
 client.on("message", message => {
+    function editFile() {
+        var file = fs.createWriteStream('words.txt');
+        file.on('error', function(err) {console.log(err)});
+        badwords.forEach(function(v) { file.write(v + '\n'); });
+        file.end();
+    }
+
     if (message.author.bot) return;
 
 
@@ -30,6 +52,7 @@ client.on("message", message => {
     } else if (args[0] == "add") {
         if (!badwords.includes(command) && (command !== "" && command !== " ")){
             badwords.push(command);
+            editFile();
             message.channel.send(command + " added to dictionary!");
         } else {
             message.channel.send(command + " not added to dictionary!");
@@ -48,6 +71,7 @@ client.on("message", message => {
                 badwords.splice(i, 1);
             }
         }
+        editFile();
         message.channel.send(command + " removed from dictionary!");
     } else {
         message.channel.send("command not found, type " + prefix + "help to see commands");
@@ -58,34 +82,12 @@ client.on("message", message => {
    const text = message.content.toLowerCase();
    badwords.forEach(item => {
     if (text.includes(item)) {
-        message.channel.send("please shut the up");
+        message.channel.send(usernames[message.author.username.toString()] + " please shut the up");
         return;
    }
-   });  
-
-    
+   });      
    
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
