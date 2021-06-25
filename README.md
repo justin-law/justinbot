@@ -7,8 +7,14 @@
 <li>$$show to list all the current words in the dictionary</li>
 <li>$$help to show all the commands available</li>
 </ul>
-<p>More to do:</p>
+<p>Other details:</p>
 <ul>
-<li>Add a persistent database, possibly using Firebase, current bot loses added words when turned off</li>
-<li>Learn how to deploy the bot, current bot needs to be manually run on my computer</li>
+<li>Has a persistent database of words to detect in the words.txt file, each word on a different line</li>
+<li>Bot can now be deployed on Heroku</li>
+  <ul>
+    <li>Make sure to change dyno to worker instead of web</li>
+    <li>Add discord token and other .env variables to Config Vars on Heroku settings</li>
+  </ul>
+<li>Word storage is currently configured for unix devices. To run on Windows, change newline (\n) instances to \r\n</li>
+<li>Can detect user name and give customized messages to different users</li>
 </ul>
